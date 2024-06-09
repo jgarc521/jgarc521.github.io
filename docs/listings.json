@@ -1,6 +1,10 @@
 [
   {
     "listing": "/projects.html",
-    "items": []
+    "items": [
+      "/posts/STAT415_Project_files/STAT415_Project.html",
+      "/posts/Bayesian Analysis Project/STAT415_Project.html",
+      "/posts/STAT415_Project.knit.html"
+    ]
   }
 ]
