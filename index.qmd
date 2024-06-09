@@ -1,8 +1,14 @@
 ---
-title: "Website"
+title: "Jose Garcia"
 image: headshot.jpeg
+about:
+  template: jolla
+  links: 
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/jose-garcia02
 ---
 
-Welcome!
+Welcome to my site!
 
-hi
+Click the links below to learn more about me, or, check out some of my projects above.
