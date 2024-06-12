@@ -1,5 +1,26 @@
 [
   {
+    "objectID": "posts/first-post/index.html",
+    "href": "posts/first-post/index.html",
+    "title": "My first post",
+    "section": "",
+    "text": "Let’s see if this renders.\n\n2+2\n\n[1] 4"
+  },
+  {
+    "objectID": "posts/second-post/index.html",
+    "href": "posts/second-post/index.html",
+    "title": "My second post",
+    "section": "",
+    "text": "Wow we are in business!\n\n2*3\n\n[1] 6"
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "My first post\n\n\n\n\n\n\n\n\n\n\n \n\n\n\n\n\n\nMy second post\n\n\n\n\n\n\n\n\n\n\n \n\n\n\n\nNo matching items"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Jose Garcia",

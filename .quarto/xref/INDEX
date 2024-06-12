@@ -7,5 +7,17 @@
   },
   "projects.qmd": {
     "projects.html": "f3a94940"
+  },
+  "posts/first-post/first-post.qmd": {
+    "first-post.html": "85c11532"
+  },
+  "posts/second-post/second-post.qmd": {
+    "second-post.html": "2311e96e"
+  },
+  "posts/first-post/index.qmd": {
+    "index.html": "79830bf4"
+  },
+  "posts/second-post/index.qmd": {
+    "index.html": "b8ba9f73"
   }
 }

@@ -1,0 +1,9 @@
+---
+title: "My second post"
+---
+
+Wow we are in business!
+
+```{r}
+2*3
+```
