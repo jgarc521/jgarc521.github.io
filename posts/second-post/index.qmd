@@ -1,9 +1,215 @@
 ---
-title: "My second post"
+title: "Naive Bayes Classification"
+author: "Jose Garcia"
+date: ''
+output:
+  html_document:
+    number_sections: yes
+  pdf_document: default
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
-Wow we are in business!
-
 ```{r}
-2*3
+library(tidyverse)
+library(ggplot2)
+library(brms)
+library(tidybayes)
+library(kableExtra)
+library(janitor)
+
+bayes_col = c("#56B4E9", "#E69F00", "#009E73", "#CC79A7", "#CC79A7")
+names(bayes_col) = c("prior", "likelihood", "posterior", "prior_predict", "posterior_predict")
+
+bayes_lty = c("dashed", "dotted", "solid")
+names(bayes_lty) = c("prior", "likelihood", "posterior")
 ```
+
+# Tasks
+
+We will use naive Bayes classification to classify a person's opinion on climate change into one of the following categories, based on characteristics including political party, age (years), and income (\$ thousands):
+
+-   Climate change is not real at all
+-   Climate change is real but not caused by people
+-   Climate change is real and caused by people
+
+Suppose that it is known that
+
+-   15% of people believe that climate change is not real at all
+-   30% of people believe that climate change is real but not caused by people
+-   55% of people believe that climate change is real and caused by people
+-   Among people who believe that climate change is not real, 50% are Republican, ages have mean 53.4 and SD 15.6, and incomes have mean 69.4 and SD 38.0
+-   Among people who believe that climate change is real but not caused by people, 40% are Republican, ages have mean 51.5 and SD 16.4, and incomes have mean 83.9 and SD 38.9
+-   Among people who believe that climate change is real and caused by people, 13% are Republican, ages have mean 47.7 and SD 16.9, and incomes have mean 88.2 and SD 43.1
+
+1.  Suppose a randomly selected person is a Republican.
+    Create a Bayes table and find the posterior probabilities of the person's opinion on climate change.
+    Which category would you classify this person as?
+
+    ```{r}
+    class <- c("Not Real", "Real but not caused", "Real and caused")
+
+    prior = c(0.15, 0.30, 0.55)
+
+    # likelihood of Republican (evidence) given each belief (class)
+    likelihood = c(0.50, 0.40, 0.13) 
+
+    product = prior * likelihood
+
+    posterior = product / sum(product)
+
+    posterior_given_repub = posterior
+
+    bayes_table = data.frame(class,
+                             prior,
+                             likelihood,
+                             product,
+                             posterior)
+
+    bayes_table |>
+      adorn_totals("row") |>
+      kbl(digits = 4) |>
+      kable_styling()
+    ```
+
+    <div>
+
+    **Based on the Bayes table, I would classify this person as a believer of "Climate change is real but not caused by people".**
+
+    </div>
+
+2.  Suppose a randomly selected person is age 75.
+    Create a Bayes table and find the posterior probabilities of the person's opinion on climate change.
+    Which category would you classify this person as?
+
+    ```{r}
+    class <- c("Not Real", "Real but not caused", "Real and caused")
+
+    prior = c(0.15, 0.30, 0.55)
+
+    # likelihood of being 75 (evidence) given each belief (class)
+    likelihood = c(dnorm(75, 53.4, 15.6),
+                   dnorm(75, 51.5, 16.4),
+                   dnorm(75, 47.7, 16.9)) 
+
+    product = prior * likelihood
+
+    posterior = product / sum(product)
+
+    bayes_table = data.frame(class,
+                             prior,
+                             likelihood,
+                             product,
+                             posterior)
+
+    bayes_table |>
+      adorn_totals("row") |>
+      kbl(digits = 4) |>
+      kable_styling()
+    ```
+
+    <div>
+
+    **Based on the Bayes table, I would classify this person as a believer of "Climate change is real and caused by people".**
+
+    </div>
+
+3.  Suppose a randomly selected person has income 40.
+    Create a Bayes table and find the posterior probabilities of the person's opinion on climate change.
+    Which category would you classify this person as?
+
+    ```{r}
+    class <- c("Not Real", "Real but not caused", "Real and caused")
+
+    prior = c(0.15, 0.30, 0.55)
+
+    # likelihood of income 40 (evidence) given each belief (class)
+    likelihood = c(dnorm(40, 69.4, 38),
+                   dnorm(40, 83.9, 38.9),
+                   dnorm(40, 88.2, 43.1)) 
+
+    product = prior * likelihood
+
+    posterior = product / sum(product)
+
+    bayes_table = data.frame(class,
+                             prior,
+                             likelihood,
+                             product,
+                             posterior)
+
+    bayes_table |>
+      adorn_totals("row") |>
+      kbl(digits = 4) |>
+      kable_styling()
+    ```
+
+    <div>
+
+    **Based on the Bayes table, I would classify this person as a believer of "Climate change is real and caused by people".**
+
+    </div>
+
+4.  Which of the three pieces of information above --- Republican party, age 75, income 40 --- results in the largest change from prior to posterior?
+    Why?
+
+    <div>
+
+    **Political affiliation, particularly being a Republican, results in the largest change from prior to posterior. Based on the data, high percentages of Republicans either deny climate change outright or reject human involvement, resulting in a significant weight assigned political affiliation. It is important to note that political ideology includes cultural, social, and economic perspectives that are deeply ingrained.**
+
+    </div>
+
+5.  Suppose a randomly selected person is Republican, is age 75, and has income 40.
+    Create a Bayes table and find the posterior probabilities of the person's opinion on climate change.
+    Which category would you classify this person as?
+
+    ```{r}
+    class <- c("Not Real", "Real but not caused", "Real and caused")
+
+    prior = posterior_given_repub
+
+    # likelihood of being 75 (evidence) given each belief (class)
+    likelihood_age = c(dnorm(75, 53.4, 15.6),
+                   dnorm(75, 51.5, 16.4),
+                   dnorm(75, 47.7, 16.9)) 
+
+    # likelihood of income 40 (evidence) given each belief (class)
+    likelihood_income = c(dnorm(40, 69.4, 38),
+                   dnorm(40, 83.9, 38.9),
+                   dnorm(40, 88.2, 43.1)) 
+
+    likelihood = likelihood_age * likelihood_income
+
+    product = prior * likelihood
+
+    posterior = product / sum(product)
+
+    bayes_table = data.frame(class,
+                             prior,
+                             likelihood_age,
+                             likelihood_income,
+                             likelihood,
+                             product,
+                             posterior)
+
+    bayes_table |>
+      adorn_totals("row") |>
+      kbl(digits = 4) |>
+      kable_styling()
+    ```
+
+    <div>
+
+    **Based on the Bayes table, I would classify this person as a believer of "Climate change is not real at all".**
+
+    </div>
+
+6.  Which assumptions of the naive Bayes classification algorithm do you think are the most questionable in the context of the example?
+    Explain your reasoning.
+
+    <div>
+
+    **The most questionable assumptions of the Naive Bayes classifier in predicting opinions on climate change based on political party, age, and income are the conditional independence of predictors and the normality of numerical predictors. These assumptions might not be accurate because the variables are often related in complicated ways, and the numerical data doesn't always follow a normal distribution.**
+
+    </div>
