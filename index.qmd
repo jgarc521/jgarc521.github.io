@@ -9,7 +9,7 @@ about:
       href: https://www.linkedin.com/in/jose-garcia02
     - icon: file-earmark-pdf-fill
       text: Resume
-      href: Website/files/JoseGarcia_Resume.pdf
+      href: jgarc521.github.io/files/JoseGarcia_Resume.pdf
 resources:
   - files/JoseGarcia_Resume.pdf
 ---
