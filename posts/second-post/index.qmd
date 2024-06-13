@@ -1,7 +1,8 @@
 ---
 title: "Naive Bayes Classification"
 author: "Jose Garcia"
-date: ''
+date: '2024-05-07'
+categories: [Bayesian, code, analysis]
 output:
   html_document:
     number_sections: yes

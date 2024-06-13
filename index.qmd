@@ -14,6 +14,10 @@ resources:
   - files/JoseGarcia_Resume.pdf
 ---
 
-Welcome to my site! Let's see if this works!
+Welcome to my site!
 
-Click the links below to learn more about me, or, check out some of my projects above.
+My name is Jose Garcia,a 4th year student studying Statistics at California Polytechnic State University, San Luis Obispo. I am from [San Jose, CA](https://www.google.com/maps/place/San+Jose,+CA/@37.2961211,-121.9809051,11z/data=!3m1!4b1!4m6!3m5!1s0x808fcae48af93ff5:0xb99d8c0aca9f717b!8m2!3d37.33874!4d-121.8852525!16zL20vMGYwNHY?entry=ttu) and some of my hobbies include: hiking, playing and watching sports, and coding.
+
+If you have any questions, do not hesitate to reach out. Thank you!
+
+Click the links for more info about me, or, check out some of my projects above.
