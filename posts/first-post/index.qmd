@@ -1,6 +1,9 @@
 ---
 title: "STAT 415 Project"
-format: html
+author: "Jose Garcia"
+date: "2024-05-27"
+categories: [Bayesian, code, analysis]
+image: "plane.jpg"
 editor: visual
 ---
 

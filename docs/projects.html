@@ -70,9 +70,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-author','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -147,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Bayesian">Bayesian <span class="quarto-category-count">(1)</span></div><div class="category" data-category="analysis">analysis <span class="quarto-category-count">(1)</span></div><div class="category" data-category="code">code <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -160,25 +160,14 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1718208251650" data-listing-reading-time-sort="6.07">
-<div class="body">
-<a href="./posts/first-post/index.html">
-<h3 class="no-anchor listing-title">
-STAT 415 Project
-</h3>
-<div class="listing-subtitle">
+<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1718207943456" data-listing-reading-time-sort="0.025">
+<div class="thumbnail">
+<a href="./posts/second-post/index.html">
+<div class="thumbnail-image">
 
 </div>
-<div class="listing-description">
-Our research question is how does flight departure delay affect customer…
+</a><p><a href="./posts/second-post/index.html"></a></p>
 </div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/first-post/index.html"> </a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1718207943456" data-listing-reading-time-sort="0.025">
 <div class="body">
 <a href="./posts/second-post/index.html">
 <h3 class="no-anchor listing-title">
@@ -194,6 +183,47 @@ Wow we are in business!
 </div>
 <div class="metadata">
 <a href="./posts/second-post/index.html"> </a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="Bayesian,code,analysis" data-listing-date-sort="1716793200000" data-listing-file-modified-sort="1718241823671" data-listing-reading-time-sort="6.07">
+<div class="thumbnail">
+<p><a href="./posts/first-post/index.html"> <img src="./posts/first-post/plane.jpg" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/first-post/index.html">
+<h3 class="no-anchor listing-title">
+STAT 415 Project
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Bayesian'); return false;">
+Bayesian
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
+code
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
+analysis
+</div>
+</div>
+<a href="./posts/first-post/index.html">
+<div class="listing-description">
+Our research question is how does flight departure delay affect customer…
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/first-post/index.html">
+<div class="listing-date">
+May 27, 2024
+</div>
+<div class="listing-author">
+Jose Garcia
+</div>
+</a>
 </div>
 </div>
 </div>
