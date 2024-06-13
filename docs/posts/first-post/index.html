@@ -344,7 +344,7 @@ The following object is masked from 'package:dplyr':
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Departure Delay (minutes)"</span>, <span class="at">y =</span> <span class="st">"Predicted Satisfaction"</span>,</span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Prior Predictive Distribution of Satisfaction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 285 rows containing missing values or values outside the scale range
+<pre><code>Warning: Removed 295 rows containing missing values or values outside the scale range
 (`geom_point()`).</code></pre>
 </div>
 <div class="cell-output-display">
@@ -393,8 +393,8 @@ Formula: satisfaction ~ dep_delay
 
 Regression Coefficients:
           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept     2.27      0.11     2.06     2.49 1.00     1713     1923
-dep_delay    -0.01      0.00    -0.02    -0.01 1.00     3691     3005
+Intercept     2.26      0.11     2.05     2.47 1.00     1559     2120
+dep_delay    -0.01      0.00    -0.02    -0.01 1.00     3849     2945
 
 Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -414,11 +414,11 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ci)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                 Estimate   Est.Error          Q2.5         Q97.5
-b_Intercept    2.26621291 0.109514461    2.06009503  2.487793e+00
-b_dep_delay   -0.01042632 0.002431255   -0.01529607 -5.671072e-03
-Intercept      2.17341864 0.104544747    1.97657126  2.383588e+00
-lprior        -2.36711272 0.038741680   -2.44653803 -2.295715e+00
-lp__        -332.37138069 1.003918227 -334.95730677 -3.314035e+02</code></pre>
+b_Intercept    2.25997430 0.106894793    2.04862559  2.473527e+00
+b_dep_delay   -0.01045203 0.002355074   -0.01501899 -5.908706e-03
+Intercept      2.16695122 0.102252579    1.96801279  2.370360e+00
+lprior        -2.36469906 0.037773476   -2.44138358 -2.292733e+00
+lp__        -332.32452595 0.944575105 -334.85667046 -3.314094e+02</code></pre>
 </div>
 </div>
 </section>
@@ -479,8 +479,8 @@ Formula: satisfaction ~ dep_delay
 
 Regression Coefficients:
           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept     2.27      0.11     2.06     2.49 1.00     1620     2091
-dep_delay    -0.01      0.00    -0.02    -0.01 1.00     3433     2849
+Intercept     2.27      0.11     2.05     2.50 1.00     1218     1698
+dep_delay    -0.01      0.00    -0.02    -0.01 1.00     3756     2733
 
 Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -504,11 +504,11 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ci)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                 Estimate   Est.Error          Q2.5         Q97.5
-b_Intercept    2.27093727 0.110684863    2.06082646  2.489648e+00
-b_dep_delay   -0.01043221 0.002457025   -0.01526246 -5.518322e-03
-Intercept      2.17809056 0.105492807    1.98082395  2.387103e+00
-lprior        -4.85739972 0.002309825   -4.86213113 -4.853234e+00
-lp__        -334.87827923 1.000746264 -337.52714621 -3.338997e+02</code></pre>
+b_Intercept    2.27151778 0.113490208    2.05463989  2.501131e+00
+b_dep_delay   -0.01043651 0.002515581   -0.01557144 -5.667569e-03
+Intercept      2.17863287 0.108450031    1.97143907  2.397745e+00
+lprior        -4.85741474 0.002370920   -4.86236652 -4.853060e+00
+lp__        -334.93306647 1.047621997 -337.74442437 -3.339055e+02</code></pre>
 </div>
 </div>
 <p>After setting our own priors for our model, we got results that we the same. The $\beta_0$ value was the exact same of 2.27. The $\beta_1$ values or the slope, were the exact same at -0.01. The 95% credible interval for the intercept is approximately [2.06, 2.48], indicating that we are 95% confident that the true intercept lies within this range. This was pretty much the same as the 95% confidence interval for brm’s priors that was [2.06, 2.49]. The 95% credible interval for `dep_delay` is approximately [-0.016, -0.006], there is a 95% probability that the true value from dep_delay is within the interval. This is sightly different from the 95% credible interval for brm’s priors that was [-0.010, 0.003]. This is probably because brm chose a flat prior for the slope, but we picked one that included some prior knowledge on the slope. Overall, the prior had very little influence on the posterior distribution. So the model is not very sensitivity to the prior.</p>
