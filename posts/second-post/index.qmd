@@ -10,8 +10,13 @@ draft: false
 
 <center>
 
-<iframe src="https://z4ztmn-jose-garcia.shinyapps.io/lab-4/" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
-
-</iframe>
-
+  <iframe 
+    src="https://z4ztmn-jose-garcia.shinyapps.io/lab-4/" 
+    width="1000" 
+    height="800" 
+    allowfullscreen="true" 
+    mozallowfullscreen="true" 
+    webkitallowfullscreen="true">
+  </iframe>
+  
 </center>

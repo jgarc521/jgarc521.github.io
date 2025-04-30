@@ -10,8 +10,13 @@ draft: false
 
 <center>
 
-<iframe src="https://jgarc521.quarto.pub/lab-3/" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
-
-</iframe>
-
+  <iframe 
+    src="https://jgarc521.quarto.pub/lab-3/" 
+    width="1000" 
+    height="800" 
+    allowfullscreen="true" 
+    mozallowfullscreen="true" 
+    webkitallowfullscreen="true">
+  </iframe>
+  
 </center>
