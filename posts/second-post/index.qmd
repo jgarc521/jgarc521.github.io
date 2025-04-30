@@ -1,1 +1,17 @@
+---
+title: "Dynamic Dashboard"
+description: "test"
+author:
+  - name: Jose Garcia
+date: 10-24-2022
+categories: [R] 
+draft: false 
+---
 
+<center>
+
+<iframe src="https://z4ztmn-jose-garcia.shinyapps.io/lab-4/" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
+
+</iframe>
+
+</center>
