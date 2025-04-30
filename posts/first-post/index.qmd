@@ -7,9 +7,7 @@ format:
     nav-buttons: 
       - icon: github
         href: https://github.com/jgarc521/lab-3
-      - icon: envelope
-        href: "mailto:jgarc521@calpoly.edu"
-logo: images/wellcome-logo-black.jpg
+logo: wellcome-logo-black.jpg
 logo-alt: Wellcome Logo
 embed-resources: true
 ---
