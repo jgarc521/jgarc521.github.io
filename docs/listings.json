@@ -5,5 +5,12 @@
       "/posts/first-post/index.html",
       "/posts/second-post/index.html"
     ]
+  },
+  {
+    "listing": "/posts.html",
+    "items": [
+      "/posts/first-post/index.html",
+      "/posts/second-post/index.html"
+    ]
   }
 ]
