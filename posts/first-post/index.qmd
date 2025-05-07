@@ -1,22 +1,441 @@
 ---
-title: "Static Dashboard"
+title: "Lab 2"
 description: "test"
 author:
   - name: Jose Garcia
-date: 10-24-2022
-categories: [R] 
-draft: false 
+date: 2022-10-24
+categories: [R]
+draft: false
+format:
+  html:
+    page-layout: full
+    embed-resources: true
+editor: source
 ---
 
-<center>
+# Instructions
 
-  <iframe 
-    src="https://jgarc521.quarto.pub/lab-3/" 
-    width="1000" 
-    height="800" 
-    allowfullscreen="true" 
-    mozallowfullscreen="true" 
-    webkitallowfullscreen="true">
-  </iframe>
-  
-</center>
+**Create a Quarto file for ALL Lab 2 (no separate files for Parts 1 and 2).**
+
+-   Make sure your final file is carefully formatted, so that each analysis is clear and concise.
+-   Be sure your knitted `.html` file shows **all** your source code, including any function definitions.
+
+```{r}
+library(tidyverse)
+library(wesanderson)
+library(leaflet)
+library(rnaturalearth)
+library(plotly)
+```
+
+# Part One: Identifying Bad Visualizations
+
+If you happen to be bored and looking for a sensible chuckle, you should check out these [Bad Visualisations](https://badvisualisations.tumblr.com/). Looking through these is also a good exercise in cataloging what makes a visualization good or bad.
+
+## Dissecting a Bad Visualization
+
+Below is an example of a less-than-ideal visualization from the collection linked above. It comes to us from data provided for the [Wellcome Global Monitor 2018 report](https://wellcome.ac.uk/reports/wellcome-global-monitor/2018) by the Gallup World Poll:
+
+1.  While there are certainly issues with this image, do your best to tell the story of this graph in words. That is, what is this graph telling you? What do you think the authors meant to convey with it?
+
+    <div>
+
+    The graph is showing us the percent of people who believe vaccines are safe by country and global region. The authors could be trying to convey regional differences in vaccine trust, outliers, and a central theme that higher-income countries (such as the US) do not always have high trust in vaccines.
+
+    </div>
+
+2.  List the variables that appear to be displayed in this visualization. *Hint: Variables refer to columns in the data.*
+
+    <div>
+
+    Country, region, % of trust, median vaccine trust by region.
+
+    </div>
+
+3.  Now that you're versed in the grammar of graphics (e.g., `ggplot`), list the *aesthetics* used and which *variables* are mapped to each.
+
+    <div>
+
+    -   x = % who believe in vaccines
+
+    -   y = country
+
+    -   color = region
+
+    </div>
+
+4.  What type of graph would you call this? Meaning, what `geom` would you use to produce this plot?
+
+    <div>
+
+    Because each individual observation is a point, I would call this a geom_point() plot.
+
+    </div>
+
+5.  Provide at least four problems or changes that would improve this graph. *Please format your changes as bullet points!*
+
+    <div>
+
+    -   Different colors, make them more fun!
+
+    -   Use faceting to remove stacking
+
+    -   Increase font size
+
+    -   Remove legend (according to Will Chase)
+
+    </div>
+
+## Improving the Bad Visualization
+
+The data for the Wellcome Global Monitor 2018 report can be downloaded at the following site: [https://wellcome.ac.uk/reports/wellcome-global-monitor/2018](https://wellcome.org/sites/default/files/wgm2018-dataset-crosstabs-all-countries.xlsx)
+
+<!-- at the "Dataset and crosstabs for all countries" link on the right side of the page-->
+
+There are two worksheets in the downloaded dataset file. You may need to read them in separately, but you may also just use one if it suffices.
+
+```{r}
+#| label: read-in-wellcome-data
+
+
+dict <- readxl::read_excel("/Users/josegarcia/Desktop/STAT_541/wgm2018.xlsx", sheet = "Data dictionary")
+
+data <- readxl::read_excel("/Users/josegarcia/Desktop/STAT_541/wgm2018.xlsx", sheet = "Full dataset") |>
+  rename(code = WP5)
+
+```
+
+```{r}
+
+# country codes
+country_codes_list <- dict$`Variable Type & Codes*`[1] |>
+  str_split(", ", simplify = TRUE) |>
+  as_tibble() |>
+  pivot_longer(cols = (1:144), names_to = NULL, values_to = "col") |>
+  separate_wider_delim("col", delim = "=", names = c("code", "country")) |>
+  mutate(
+  code = as.integer(str_trim(code)),
+  country = str_trim(country) |> str_remove(",$")
+)
+
+# region codes
+region_codes_list <- dict$`Variable Type & Codes*`[57] |>
+  str_split(",", simplify = TRUE) |>
+  as_tibble() |>
+  pivot_longer(cols = everything(), names_to = NULL, values_to = "col") |>
+  mutate(col = str_trim(col)) |> # trim white space
+  filter(col != "") |> # filter out blanks
+  separate_wider_delim("col", delim = "=", names = c("Regions_Report", "region")) |>
+  mutate(
+    region_code = as.integer(str_trim(Regions_Report)),
+    region = str_trim(region),
+    Regions_Report = as.integer(Regions_Report)
+  )
+
+# join data
+full_data <- data |>
+  left_join(country_codes_list, by = "code") |>
+  left_join(region_codes_list, by = "Regions_Report")
+```
+
+```{r}
+safe_vax_pct <- full_data |>
+  group_by(country) |>
+  summarise(
+    total_agree = sum(Q25 %in% c(1, 2), na.rm = TRUE),
+    total = n(),
+    percent_safe = total_agree / total * 100,
+    .groups = "drop"
+  ) |>
+  left_join(full_data |> select(country, Regions_Report) |> distinct(), by = "country") |>
+  mutate(region = case_when( # build regions
+    Regions_Report %in% c(10, 11, 12)      ~ "Asia",                      
+    Regions_Report %in% c(3, 13)           ~ "Middle East and North Africa",  
+    Regions_Report %in% c(1, 2, 4, 5)      ~ "Sub-Saharan Africa",        
+    Regions_Report %in% c(6, 7, 8)         ~ "Americas",                  
+    Regions_Report %in% c(14, 15, 16, 17)  ~ "Europe",                    
+    Regions_Report == 9                   ~ "Former Soviet Union"
+  ))
+```
+
+6.  Improve the visualization above by either re-creating it with the issues you identified fixed OR by creating a new visualization that you believe tells the same story better.
+
+```{r}
+#| label: new-and-improved-visualization
+#| fig-height: 8
+safe_vax_pct |>
+  filter(!is.na(region)) |>
+  group_by(region) |>
+  mutate(
+    country = fct_reorder(country, percent_safe),  
+    region_median = median(percent_safe, na.rm = TRUE)
+  ) |>
+  ungroup() |>
+  ggplot(aes(x = percent_safe, y = country)) +
+  geom_vline(aes(xintercept = region_median), linetype = "dashed", color = "black") +
+  geom_point(aes(color = region), size = 3) +
+  facet_wrap(~ region, scales = "free_y") +
+  scale_color_manual(values = wes_palette("Zissou1", n = 6, type = "continuous")) +
+  labs(
+    title = "% of people who believe vaccines are safe, by country and global region",
+    subtitle = "Dark vertical lines represent region medians",
+    x = "% who believe vaccines are safe",
+    y = NULL,
+    caption = "Source: Wellcome Global Monitor, Gallup World Poll 2018"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 15),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position = "none",
+    axis.text.y = element_text(size = 5)
+  )
+```
+
+# Part Two: Broad Visualization Improvement
+
+The full Wellcome Global Monitor 2018 report can be found here: <https://wellcome.ac.uk/sites/default/files/wellcome-global-monitor-2018.pdf>. Surprisingly, the visualization above does not appear in the report despite the citation in the bottom corner of the image!
+
+## Second Data Visualization Improvement
+
+**For this second plot, you must select a plot that uses maps so you can demonstrate your proficiency with the `leaflet` package!**
+
+7.  Select a data visualization in the report that you think could be improved. Be sure to cite both the page number and figure title. Do your best to tell the story of this graph in words. That is, what is this graph telling you? What do you think the authors meant to convey with it?
+
+    <div>
+
+    I decided to recreate and improve Chart 2.3: Map of perceived knowledge about science by country which is on page 27 of the report. The map shows the perceived knowledge about science of people in different countries. The authors may be trying to convey that peoples confidence in their science knowledge varies across countries. Certain countries may have lower confidence due to a limited access to educational resources, however it is important to note that plots like these can be damaging as viewers might interpret lower metrics as a reflection of a country's intelligence/worth (when that is simply not true).
+
+    </div>
+
+8.  List the variables that appear to be displayed in this visualization.
+
+    <div>
+
+    -   Country
+
+    -   Percent who answered "a lot" or "some"
+
+    -   Surveyed status?
+
+    </div>
+
+9.  Now that you're versed in the grammar of graphics (ggplot), list the aesthetics used and which variables are specified for each.
+
+    <div>
+
+    -   fill for the percents
+
+    -   geometry for country
+
+    -   color for survey status
+
+    </div>
+
+10. What type of graph would you call this?
+
+    <div>
+
+    Choropleth map
+
+    </div>
+
+11. List all of the problems or things you would improve about this graph.
+
+    <div>
+
+    -   use different colors for better contrast
+
+    -   hover over to see percents
+
+    -   differentiate NA's more clearly
+
+    </div>
+
+12. Improve the visualization above by either re-creating it with the issues you identified fixed OR by creating a new visualization that you believe tells the same story better.
+
+```{r}
+#| label: second-improved-visualization
+
+world <- ne_countries(type = "countries", scale = "small")
+
+science_pct <- full_data |>
+  mutate(country = if_else(country == "United States", "United States of America", country)) |>
+  group_by(country) |>
+  summarise(
+    total_strong = sum(Q1 %in% c(1, 2), na.rm = TRUE),
+    total = n(),
+    percent_strong = total_strong / total * 100
+  )
+
+map_data <- world |>
+  left_join(science_pct, by = c("name" = "country"))
+
+qpal <- colorNumeric("YlGnBu", domain = map_data$percent_strong, na.color = "white")
+
+leaflet(map_data) |>
+  addTiles() |>
+  addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1,
+    color = ~qpal(percent_strong),
+    label = ~paste0(name, ": ", round(percent_strong, 1), "%")) |>
+  addLegend(pal = qpal, values = map_data$percent_strong, title = "Knowledge Level (%)", position = "bottomright")|>
+  addControl(
+    html = "Map of perceived knowledge about science by country",
+    position = "topright"
+  ) |>
+  setView(lng = 0, lat = 0, zoom = 2)
+```
+
+## Third Data Visualization Improvement
+
+**For this third plot, you must use one of the other `ggplot2` extension packages mentioned this week (e.g., `gganimate`, `plotly`, `patchwork`, `cowplot`).**
+
+13. Select a data visualization in the report that you think could be improved. Be sure to cite both the page number and figure title. Do your best to tell the story of this graph in words. That is, what is this graph telling you? What do you think the authors meant to convey with it?
+
+    <div>
+
+    For the second visualization, I chose Chart 3.1: Trust in Scientists Index showing levels of trust by region which is on page 53. The chart shows us the levels in which people trust scientists from different regions. The authors may be trying to display where certain regions may trust scientists less in order to identify where resources/policy changes could be needed.
+
+    </div>
+
+14. List the variables that appear to be displayed in this visualization.
+
+    <div>
+
+    -   Region
+
+    -   Trust level
+
+    -   Percent for each level within each region
+
+    </div>
+
+15. Now that you're versed in the grammar of graphics (ggplot), list the aesthetics used and which variables are specified for each.
+
+    <div>
+
+    -   y = region
+
+    -   x = percent
+
+    -   fill = trust level
+
+    </div>
+
+16. What type of graph would you call this?
+
+    <div>
+
+    This is a stacked bar chart.
+
+    </div>
+
+17. List all of the problems or things you would improve about this graph.
+
+    <div>
+
+    -   colors are not intuitive
+
+    -   no clear sorting
+
+    -   fonts are too small
+
+    -   too crowed
+
+    -   could use interactive elements
+
+    </div>
+
+18. Improve the visualization above by either re-creating it with the issues you identified fixed OR by creating a new visualization that you believe tells the same story better.
+
+```{r}
+#| label: third-improved-visualization
+
+trust_scientists <- full_data |> # calculate percents by countries
+  filter(WGM_Indexr %in% c(1, 2, 3, 99), !is.na(region)) |>
+  mutate(
+    trust_level = case_when( 
+      WGM_Indexr == 1 ~ "Low",
+      WGM_Indexr == 2 ~ "Medium",
+      WGM_Indexr == 3 ~ "High",
+      WGM_Indexr == 99 ~ "Don't know / Refused"
+    )
+  ) |>
+  group_by(region, trust_level) |>
+  summarise(n = n(), .groups = "drop") |>
+  group_by(region) |>
+  mutate(percent = n / sum(n) * 100)
+
+trust_global <- full_data |> # calculate global percentage
+  mutate(
+    trust_level = case_when(
+      WGM_Indexr == 1 ~ "Low",
+      WGM_Indexr == 2 ~ "Medium",
+      WGM_Indexr == 3 ~ "High",
+      WGM_Indexr == 99 ~ "Don't know / Refused"
+    )
+  ) |>
+  group_by(trust_level) |>
+  summarise(
+    total = n(),
+    .groups = "drop"
+  ) |>
+  mutate(
+    percent = total / sum(total) * 100,
+    region = "World"
+  )
+
+trust_scientists <- bind_rows(trust_scientists, trust_global) # bind
+```
+
+```{r}
+
+trust_scientists <- trust_scientists |>
+  mutate( # create factors
+    trust_level = factor(trust_level, levels = c("High", "Medium", "Low", "Don't know / Refused"))
+  )
+
+custom_colors <- c(
+  "Don't know / Refused" = "#f4a261",  
+  "Low" = "#c6dbef",
+  "Medium" = "#6baed6",
+  "High" = "#4292c6"
+)
+
+p <- ggplot(trust_scientists, aes(x = percent, y = region, fill = trust_level, text = paste0(
+    "Region: ", region, "<br>",
+    "Trust Level: ", trust_level, "<br>",
+    "Percent: ", round(percent), "%"
+  )
+  )) +
+  geom_col(width = 0.7, position = "stack") +
+  scale_fill_manual(values = custom_colors) +
+  labs(
+    title = "Trust in Scientists Index showing levels of trust by region",
+    x = "",
+    y = "",
+    fill = "Trust Level"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(size = 12)
+  )
+
+ggplotly(p, tooltip = "text") |>
+  layout(
+    legend = list( # could not figure out how to switch order in legend
+      orientation = "h",
+      x = 0.5,
+      y = 1.10,  
+      xanchor = "center",
+      font = list(size = 13)
+    ),
+    margin = list(t = 100)  
+  )
+```
+
