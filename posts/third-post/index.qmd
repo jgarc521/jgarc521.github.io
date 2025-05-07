@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Dashboard"
-description: "test"
+description: "Dashboard from Lab 3 updated with interactivity for Lab 4"
 author:
   - name: Jose Garcia
 date: 2025-04-28

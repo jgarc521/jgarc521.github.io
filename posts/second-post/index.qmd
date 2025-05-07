@@ -1,6 +1,6 @@
 ---
 title: "Static Dashboard"
-description: "test"
+description: "Dashboard made for Lab 3"
 author:
   - name: Jose Garcia
 date: 2025-04-21

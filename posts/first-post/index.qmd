@@ -1,6 +1,6 @@
 ---
-title: "Lab 2"
-description: "test"
+title: "Advanced Visualizations"
+description: "Visualizations from Lab 2"
 author:
   - name: Jose Garcia
 date: 2025-04-14
