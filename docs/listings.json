@@ -9,9 +9,9 @@
   {
     "listing": "/posts.html",
     "items": [
-      "/posts/third-post/index.html",
+      "/posts/first-post/index.html",
       "/posts/second-post/index.html",
-      "/posts/first-post/index.html"
+      "/posts/third-post/index.html"
     ]
   }
 ]

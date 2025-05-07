@@ -2,7 +2,7 @@
 title: "Posts"
 listing: 
   contents: posts
-  sort: "date desc"
+  sort: "date asc"
   type: default
   sort-ui: false
   filter-ui: false
