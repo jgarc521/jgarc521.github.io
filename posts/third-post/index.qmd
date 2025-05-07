@@ -34,8 +34,6 @@ If you happen to be bored and looking for a sensible chuckle, you should check o
 
 Below is an example of a less-than-ideal visualization from the collection linked above. It comes to us from data provided for the [Wellcome Global Monitor 2018 report](https://wellcome.ac.uk/reports/wellcome-global-monitor/2018) by the Gallup World Poll:
 
-![](image/bad-wellcome-graph.jpg){width="382"}
-
 1.  While there are certainly issues with this image, do your best to tell the story of this graph in words. That is, what is this graph telling you? What do you think the authors meant to convey with it?
 
     <div>
