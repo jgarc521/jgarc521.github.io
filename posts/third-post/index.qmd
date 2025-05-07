@@ -1,7 +1,8 @@
 ---
 title: "Lab 2"
-author: "Jose Garcia"
-subtitle: "Advanced Data Visualization"
+description: "test"
+author:
+  - name: Jose
 format:
   html: 
     page-layout: full
