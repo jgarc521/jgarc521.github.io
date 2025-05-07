@@ -3,7 +3,7 @@ title: "Lab 2"
 description: "test"
 author:
   - name: Jose Garcia
-date: 2022-10-24
+date: 2025-04-14
 categories: [R]
 draft: false
 format:

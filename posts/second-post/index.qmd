@@ -3,7 +3,7 @@ title: "Static Dashboard"
 description: "test"
 author:
   - name: Jose Garcia
-date: 10-24-2022
+date: 2025-04-21
 categories: [R] 
 draft: false 
 ---

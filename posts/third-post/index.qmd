@@ -3,7 +3,7 @@ title: "Dynamic Dashboard"
 description: "test"
 author:
   - name: Jose Garcia
-date: 10-24-2022
+date: 2025-04-28
 categories: [R] 
 draft: false 
 ---
