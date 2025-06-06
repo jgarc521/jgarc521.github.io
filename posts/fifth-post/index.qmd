@@ -87,7 +87,7 @@ ISS_data <- pass_times(capitals)
 ISS_data <- ISS_data |>
   arrange(State, PassTime)
 
-#pivoting on pass times to create one row per capital
+# pivoting on pass times to create one row per capital
 ISS_data = ISS_data |> pivot_wider(names_from = PassNumber, values_from = PassTime, names_prefix = "Pass")
 ```
 
@@ -129,7 +129,7 @@ leaflet(data = capitals) |>
 
 ```{r}
 
-#formatting popups and labels as HTML for line breaks
+# formatting popups and labels as HTML for line breaks
 popups <- paste0(ISS_data$State, ", ", ISS_data$Capital, "<br>",
                 "Next 3 Passes: <br>",
                 ISS_data$Pass1, " UTC", "<br>",
@@ -158,7 +158,6 @@ leaflet(data = ISS_data) |>
 # Question 5
 
 ```{r}
-
 east_west <- ISS_data |>
   arrange(Pass1)
 
@@ -177,6 +176,10 @@ leaflet(data = ISS_data) |>
                color = "red",
                weight = 2)
 
-
-
 ```
+
+<div>
+
+**\*Note that for questions 4 and 5, I did NOT write the entire code, but rather my code was used as a base . It is included to showcase the final results built upon my API function.\***
+
+</div>
