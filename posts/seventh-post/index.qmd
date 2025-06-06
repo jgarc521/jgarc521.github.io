@@ -1,0 +1,176 @@
+---
+title: "Generative Art"
+description: "Art from Lab 9"
+author:
+  - name: Jose Garcia
+date: 2025-06-02
+categories: [R]
+draft: false
+format:
+  html:
+    page-layout: full
+    embed-resources: true
+editor: source
+---
+
+```{r}
+#| message: false
+library(ggplot2)
+library(tibble)
+library(tidyverse)
+library(ambient)
+library(viridis)
+```
+
+## HypeR Space
+
+```{r}
+polar_art <- function(seed, n, palette) {
+  
+  set.seed(seed)
+  
+  dat <- tibble(
+    x0 = rnorm(n, mean = 0.5, sd = 0.15),
+    y0 = runif(n, min = 0, max = 1),
+    x1 = x0 + rnorm(n, mean = 0, sd = 0.1),
+    y1 = y0 + rt(n, df = 5) * 0.05,
+    shade = pmin(1, rbeta(n, shape1 = 2, shape2 = 5)),
+    size = rgamma(n, shape = 2, rate = 5)
+  )
+  
+  dat |> 
+    ggplot(aes(
+      x = x0,
+      y = y0,
+      xend = x1,
+      yend = y1,
+      colour = shade,
+      size = size
+    )) +
+    geom_segment(show.legend = FALSE) +
+    coord_polar(clip = "off") +
+    scale_y_continuous(expand = c(0, 1)) +
+    scale_x_continuous(expand = c(0, 5)) + 
+    scale_colour_gradientn(colours = palette) + 
+    scale_size(range = c(0, 800)) + 
+    theme_void()
+
+}
+```
+
+```{r}
+#| warning: false
+polar_art(seed = 521, n = 100000, palette = c(c("#00FFFF", "#1B03A3", "#9F00FF", "#FF00FF")
+))
+```
+
+<div>
+
+**This piece represents the power of space. An all knowing, yet still unknown to mankind, force of nature. Venture into the depths of space, to reach the corners of nothingness.**
+
+</div>
+
+<div>
+
+**The polar_art() function generates randomized Cartesian coordinates from statistical distributions, which it then converts to polar coordinates for plotting.**
+
+-   x0, y0, x1, y1 control the positions and directions of the lines
+
+-   n controls the number of lines generated
+
+    -   here, we generated 100,000 lines
+
+<!-- -->
+
+-   shade controls the color of each line
+
+    -   Beta makes most lines dark
+
+-   size controls the line thickness
+
+    -   Gamma makes most lines thin
+
+-   seed(521) makes sure that the image is reproducible
+
+    -   521 is part of my student email!
+
+</div>
+
+## StarRy Night
+
+```{r}
+set.seed(521)
+
+# create grid
+grid <- long_grid(
+  x = seq(1, 20, length.out = 100),
+  y = seq(1, 20, length.out = 100)
+)
+
+# curl
+curl <- curl_noise(
+  generator = gen_simplex,
+  frequency = 0.1,
+  seed = 42,
+  x = grid$x,
+  y = grid$y
+)
+
+# create lengths to add variation to vector sizes
+lengths <- rgamma(nrow(grid), shape = 2, rate = 1.5)
+
+# combien
+art <- grid |>
+  mutate(
+    dx = curl$x,
+    dy = curl$y,
+    len = lengths,
+    xend = x + dx * len,
+    yend = y + dy * len,
+    color_val = len
+  )
+
+# plot
+ggplot(art) +
+  geom_segment(
+    aes(x = x, y = y, xend = xend, yend = yend, color = color_val),
+    alpha = 0.9,
+    linewidth = 0.3
+  ) +
+  scale_color_viridis(option = "turbo") +
+  coord_equal() +
+  theme_void() +
+  theme(
+    panel.background = element_rect(fill = "black"),
+    legend.position = "none"
+  )
+```
+
+<div>
+
+**StarRy Night is a simulation based recreation of the piece "The Starry Night" from the brilliant mind of Van Gogh. It represents the beauty and power of computational statistics in the field of artistic expression.**
+
+</div>
+
+<div>
+
+**The code generates a vector field using curl noise which creates a swirling motion across the grid.**
+
+-   x, y, xend, yend control the starting and end points of each vector
+
+    -   100 x 100 grid = 10,000 vectors
+
+-   len controls the length of each vector
+
+    -   Gamma makes most vectors short
+
+-   color_val controls the color of each line
+
+    -   longer lines are brighter
+
+-   scale_color_viridis() gives the uniform color spectrum
+
+    -   Turbo adds the bright colors like the blue and green hues
+
+</div>
+
