@@ -1,5 +1,5 @@
 ---
-title: "JSON Data and API"
+title: "JSON Data and APIs"
 description: "Functions from Lab 7"
 author:
   - name: Jose Garcia
