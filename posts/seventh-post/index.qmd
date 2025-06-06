@@ -173,4 +173,3 @@ ggplot(art) +
     -   Turbo adds the bright colors like the blue and green hues
 
 </div>
-
