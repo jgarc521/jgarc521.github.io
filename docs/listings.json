@@ -11,7 +11,8 @@
     "items": [
       "/posts/first-post/index.html",
       "/posts/second-post/index.html",
-      "/posts/third-post/index.html"
+      "/posts/third-post/index.html",
+      "/posts/fourth-post/index.html"
     ]
   }
 ]
