@@ -26,12 +26,14 @@ const ABOUT_TEXT = [
 const SKILLS = ['JavaScript', 'TypeScript', 'React', 'Node.js', 'Python', 'PostgreSQL', 'Git', 'AWS', 'Docker', 'REST APIs'];
 
 const PROJECTS = [
-  { name: 'Project One', year: '2026', desc: 'A short, honest sentence about what it does and why it mattered.',
-    links: [{ label: 'Live', href: 'https://example.com' }, { label: 'GitHub', href: 'https://github.com/jgarc521' }] },
-  { name: 'Project Two', year: '2025', desc: 'Another one. Lead with the impact or the interesting technical bit.',
-    links: [{ label: 'GitHub', href: 'https://github.com/jgarc521' }] },
-  { name: 'This Portfolio', year: '2026', desc: 'A desktop-style portfolio built in React. The thing you are using right now.',
-    links: [{ label: 'GitHub', href: 'https://github.com/jgarc521' }] },
+  {
+    name: 'Breast Cancer Survival (R + Python)',
+    year: '2026',
+    desc: 'Survival modeling on clinical data, built in Positron with Quarto.',
+    doc: 'breast_cancer.html',           // file in public/projects/
+    links: [{ label: 'GitHub', href: 'https://github.com/jgarc521/breast-cancer-survival-ml' }],
+  },
+  // projects without a doc just omit the `doc` field
 ];
 
 const CONTACT_LINKS = [
@@ -115,7 +117,8 @@ function SkillsPanel() {
     </div>
   );
 }
-function ProjectsPanel() {
+function ProjectsPanel({ api }) {
+  const base = process.env.PUBLIC_URL || '';
   return (
     <div>
       <p className="kicker">selected work</p>
@@ -125,7 +128,16 @@ function ProjectsPanel() {
         <div className="proj" key={pr.name}>
           <div className="proj-top"><span className="proj-name">{pr.name}</span><span className="proj-year">{pr.year}</span></div>
           <p className="proj-desc">{pr.desc}</p>
-          <div className="proj-links">{pr.links.map(l => <a className="link" key={l.label} href={l.href} target="_blank" rel="noreferrer">{l.label} ↗</a>)}</div>
+          <div className="proj-actions">
+            {pr.doc && (
+              <button className="btn" onClick={() => api.openViewer({ name: `${pr.name} — writeup`, href: `${base}/projects/${pr.doc}` })}>
+                Open writeup
+              </button>
+            )}
+            {pr.links.map(l => (
+              <a className="btn ghost" key={l.label} href={l.href} target="_blank" rel="noreferrer">{l.label} ↗</a>
+            ))}
+          </div>
         </div>
       ))}
     </div>
@@ -425,7 +437,7 @@ function BootScreen({ onDone }) {
    Gesture handlers are created ONCE and kept stable so a focus
    re-render can never tear them off mid-drag.
    ============================================================ */
-function Win({ data, onFocus, onClose, onMinimize, onMaximize, onCommit }) {
+function Win({ data, onFocus, onClose, onMinimize, onMaximize, onCommit, api }) {
   const app = APPS.find(a => a.id === data.app);
   const ref = useRef(null);
   const gesture = useRef(null);
@@ -488,7 +500,7 @@ function Win({ data, onFocus, onClose, onMinimize, onMaximize, onCommit }) {
           <button className="win-ctrl close" aria-label="Close" onClick={() => onClose(data.id)}>✕</button>
         </div>
       </div>
-      <div className="win-body"><Body data={data} /></div>
+      <div className="win-body"><Body data={data} api={api} /></div>
       <span className="win-resize" onPointerDown={startResize} />
     </div>
   );
@@ -603,7 +615,8 @@ export default function App() {
       </div>
 
       {wins.map(w => (
-        <Win key={w.id} data={w} onFocus={focusWin} onClose={closeWin} onMinimize={minWin} onMaximize={maximize} onCommit={commit} />
+        <Win key={w.id} data={w} onFocus={focusWin} onClose={closeWin} 
+          onMinimize={minWin} onMaximize={maximize} onCommit={commit} api={{ openViewer }} />
       ))}
 
       {marquee && <div className="marquee" style={{ left: marquee.x, top: marquee.y, width: marquee.w, height: marquee.h }} />}
